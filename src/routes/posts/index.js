@@ -4,13 +4,15 @@ const Post = require("../../models/posts");
 const User = require("../../models/users");
 const Comment = require("../../models/comments")
 
+const db = require("../../models");
+
 router.get('/', async (req, res) => {
 
   try {
 
     const mySort = { createdAt: -1 }
     const posts = await Post.find({}).sort(mySort)
-    .populate("comments")
+    .populate("user")
     res.send(posts)
 
   } catch (error) {
@@ -33,6 +35,20 @@ router.get('/:id', async (req, res) => {
     res.send(error)
   }
 });
+
+router.get('/com/:id', async (req, res) => {
+
+    try {
+      
+      const post = await Post.findOne({_id: req.params.id})
+      .populate("comments")      
+      res.send(post)
+  
+    } catch (error) {
+      console.log(error)
+      res.send(error)
+    }
+  });
 
 
 router.post("/", async (req, res) => {

@@ -4,6 +4,7 @@ const mongooseConnection = require("./src/db/mongoose");
 const userRouter = require("./src/routes/users")
 const postRouter = require("./src/routes/posts")
 const commentRouter = require("./src/routes/comments")
+const db = require("./src/models");
 require("dotenv").config();
 const port = process.env.PORT || 9900
 
