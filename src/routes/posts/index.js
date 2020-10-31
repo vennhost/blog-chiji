@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Post = require("../../models/posts");
 const User = require("../../models/users");
+const Comment = require("../../models/comments")
 
 router.get('/', async (req, res) => {
 
@@ -21,8 +22,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 
   try {
-    const post = await (await Post.findById(req.params.id))
-    .populate("comments")
+    
+    const post = await Post.findOne({_id: req.params.id})
+    .populate("user")
+    
     res.send(post)
 
   } catch (error) {

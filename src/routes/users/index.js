@@ -1,5 +1,7 @@
 const express = require("express")
 const User = require("../../models/users")
+const Post = require("../../models/posts");
+const Comment = require("../../models/comments");
 const mongoose = require("mongoose")
 
 const router = express.Router()
@@ -24,12 +26,7 @@ router.get("/", async (req, res) => {
     
     try {
         const users = await User.find({})
-        .populate({
-            path: "posts",
-            populate: {
-               path: "comments" 
-            }
-         })
+        .populate("posts")
         res.send(users)
         
     } catch (error) {
@@ -43,13 +40,8 @@ router.get("/:id", async (req, res) => {
     const isIDValid = mongoose.Types.ObjectId.isValid(req.params.id);
   if (isIDValid) {
     try {
-        const user = await (await User.findById(req.params.id))
-        .populate({
-            path: "posts",
-            populate: {
-               path: "comments" 
-            }
-         });
+        const user = await User.findOne({_id: req.params.id})
+        .populate("comments");
         user ? res.send(user) : res.status(404).send("No user found!");
         res.send(user)
         
